@@ -2,3 +2,5 @@ Trial_chroma_langchain/
 __pycache__/
 *.db
 *.env
+test_graphrag.py
+Original_llm_pipeline.py
