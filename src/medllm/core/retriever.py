@@ -1,41 +1,39 @@
-from langchain_nvidia_ai_endpoints import ChatNVIDIA, NVIDIARerank
-from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.documents import Document
-from src.medllm.core.prompt import RetrieverFilterPrompt, AnswerGenerationPrompt
-from src.medllm.config.config import MODEL_ID_FILTER, API_KEY
+from neo4j import GraphDatabase
+from ..config.config import NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD, SQLITE_DB_PATH
+import sqlite3
 
-def get_retrieval_llm():
-    return ChatNVIDIA(model=MODEL_ID_FILTER, temperature=0)
+def retrieve_from_vectorstore(vectorstore, query, drug_list, k=5):
+    retriever = vectorstore.as_retriever(search_kwargs={"k": k})
+    results = []
+    for drug in drug_list:
+        result = vectorstore.similarity_search(query, filter={"drug_name": drug}, k=k if len(drug_list) <= 3 else 1)
+        results.extend(result)
+    return results
 
-def grade_retrieval(question, documents):
-    prompt = PromptTemplate(
-        template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a grader assessing relevance
-        of a retrieved document to a user question. If the document contains keywords related to the user question,
-        grade it as relevant. Give a binary score 'yes' or 'no' in JSON with key 'score'.
-        <|eot_id|><|start_header_id|>user<|end_header_id>
-        Document: {document}\nQuestion: {question} <|eot_id|>""",
-        input_variables=["question", "document"]
-    )
-    llm = get_retrieval_llm()
-    retrieval_grader = prompt | llm | JsonOutputParser()
-    return retrieval_grader.invoke({"question": question, "document": documents})
+def query_graph(graph_query):
+    if not graph_query:
+        return ""
+    driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
+    try:
+        driver.verify_connectivity()  # 驗證連線
+        with driver.session() as session:
+            result = session.run(graph_query)
+            res = [record["r"]["description"] for record in result if "r" in record] or [""]
+            return res[0]
+    except Exception as e:
+        print(f"GraphRAG query failed: {str(e)}")
+        return ""
+    finally:
+        driver.close()
 
-def filter_retrieval(question, documents):
-    prompt = PromptTemplate(template=RetrieverFilterPrompt, input_variables=["question", "documents"])
-    llm = get_retrieval_llm()
-    retrieval_filter = prompt | llm | JsonOutputParser()
-    filtered = retrieval_filter.invoke({"question": question, "documents": documents})
-    return [Document(page_content=f["page_content"]) for f in filtered['filtered docs']]
-
-def rank_documents(question, documents):
-    ranker = NVIDIARerank(model="nv-rerank-qa-mistral-4b:1", api_key=API_KEY)
-    ranker.top_n = 5
-    return ranker.compress_documents(query=question, documents=documents)
-
-def generate_answer(question, context):
-    prompt = PromptTemplate(template=AnswerGenerationPrompt, input_variables=["question", "context"])
-    llm = get_retrieval_llm()
-    rag_chain = prompt | llm | JsonOutputParser()
-    generation = rag_chain.invoke({"context": context, "question": question})
-    return generation['answer']
+def query_tabular(sql_query):
+    conn = sqlite3.connect(SQLITE_DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(sql_query.split("|")[0].strip())
+        result = cursor.fetchall()
+    except Exception:
+        result = ""
+    cursor.close()
+    conn.close()
+    return result
