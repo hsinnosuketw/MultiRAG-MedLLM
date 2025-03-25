@@ -1,4 +1,4 @@
-from src.medllm.core.vectorstore import get_vectorstore
+from src.medllm.core.vectorstore import get_vectorstore, retrieve_from_chroma
 from src.medllm.core.query_rewriter import rewrite_vectorstore_query, rewrite_graph_query, rewrite_tabular_query
 from src.medllm.core.retriever import retrieve_from_vectorstore, query_graph, query_tabular
 from src.medllm.core.grader import grade_retrieval, filter_retrieval, rank_documents, generate_answer
@@ -32,10 +32,14 @@ def main(question):
                       metadata={"source": "TabularRAG"})
     graph_doc = Document(page_content=graph_result, metadata={"source": "graphRAG"})
     docs.extend([tab_doc, graph_doc])
+    print()
+    print(docs)
+    print()
 
     # 評分與過濾
     graded_docs = grade_retrieval(question, docs)
-    filtered_docs = filter_retrieval(question, docs)
+    # print(graded_docs)
+    filtered_docs = filter_retrieval(question, graded_docs)
 
     # 排序與生成回答
     ranked_docs = rank_documents(question, filtered_docs)
@@ -44,5 +48,6 @@ def main(question):
     return final_answer
 
 if __name__ == "__main__":
-    question = "Opdivo vs Opdivo Qvantig: What is the Difference?"
+    question = "Do GLP-1 drugs like Ozempic reduce dementia risk?"
     print(main(question))
+    print(retrieve_from_chroma(question))

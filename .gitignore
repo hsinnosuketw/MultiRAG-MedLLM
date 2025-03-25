@@ -1,4 +1,5 @@
 Trial_chroma_langchain/
+chroma_database_demo/
 __pycache__/
 *.db
 *.env
