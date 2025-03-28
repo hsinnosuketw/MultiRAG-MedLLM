@@ -1,3 +1,4 @@
+from langchain.docstore.document import Document
 from langchain_community.vectorstores import Chroma
 import chromadb
 from chromadb.config import Settings
@@ -26,6 +27,22 @@ client = chromadb.PersistentClient(path="./chroma_database_demo")
 collection_name = "drugbank"
 collection = client.get_or_create_collection(name=collection_name)
 
+def parse_to_langchain_documents(results):
+    """
+    將 Chroma 檢索結果解析成 LangChain Document 物件列表。
+    :param results: Chroma 查詢結果，包含 documents、metadatas 和 distances
+    :return: List[Document] - LangChain Document 物件列表
+    """
+    documents = []
+    for doc, meta, dist in zip(results["documents"][0], results["metadatas"][0], results["distances"][0]):
+        # 創建 LangChain Document 物件
+        langchain_doc = Document(
+            page_content=doc,  # 文件內容
+            metadata={**meta, "distance": dist}  # 合併原始元數據與距離
+        )
+        documents.append(langchain_doc)
+    return documents
+
 def retrieve_from_chroma(query: str, n_results: int = 5) -> dict:
     """
     從 Chroma 資料庫中檢索與查詢最相關的文檔。
@@ -43,4 +60,4 @@ def retrieve_from_chroma(query: str, n_results: int = 5) -> dict:
         include=["documents", "metadatas", "distances"]  # 指定返回的欄位
     )
     
-    return results
+    return parse_to_langchain_documents(results)

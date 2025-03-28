@@ -50,4 +50,4 @@ def main(question):
 if __name__ == "__main__":
     question = "Do GLP-1 drugs like Ozempic reduce dementia risk?"
     print(main(question))
-    print(retrieve_from_chroma(question))
+    # print(retrieve_from_chroma(question))
