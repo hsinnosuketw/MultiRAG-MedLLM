@@ -1,22 +1,22 @@
-from src.medllm.core.vectorstore import get_vectorstore, retrieve_from_chroma
-from src.medllm.core.query_rewriter import rewrite_vectorstore_query, rewrite_graph_query, rewrite_tabular_query
+from src.medllm.core.vectorstore import retrieve_from_chroma
+from src.medllm.core.query_rewriter import rewrite_graph_query, rewrite_tabular_query
 from src.medllm.core.retriever import retrieve_from_vectorstore, query_graph, query_tabular
 from src.medllm.core.grader import grade_retrieval, filter_retrieval, rank_documents, generate_answer
-from src.medllm.utils.utils import measure_time, load_list_from_file
+from src.medllm.utils.utils import measure_time # load_list_from_file
 from langchain_core.documents import Document
 import src.medllm.utils.extract as extract
 
 @measure_time
 def main(question):
     # 載入藥物和標籤清單
-    drug_tag_list = load_list_from_file('src/medllm/utils/drugTagList.txt')
-    drug_list = load_list_from_file('src/medllm/utils/drugName.txt')
+    # drug_tag_list = load_list_from_file('src/medllm/utils/drugTagList.txt')
+    # drug_list = load_list_from_file('src/medllm/utils/drugName.txt')
 
     # Vectorstore 重寫與檢索
-    drug_list_extracted = extract.extract_drug(question)
-    query_vs = rewrite_vectorstore_query(question, drug_tag_list, drug_list_extracted)
-    vectorstore = get_vectorstore()
-    vs_docs = retrieve_from_vectorstore(vectorstore, query_vs, drug_list_extracted) if drug_list_extracted else []
+    # drug_list_extracted = extract.extract_drug(question)
+    # query_vs = rewrite_vectorstore_query(question, drug_tag_list, drug_list_extracted)
+    # vectorstore = get_vectorstore()
+    vs_docs = retrieve_from_chroma(question, k=5)
 
     # GraphRAG 重寫與檢索
     graph_query = rewrite_graph_query(question)

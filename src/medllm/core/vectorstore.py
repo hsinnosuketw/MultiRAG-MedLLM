@@ -5,20 +5,20 @@ from .embeddings import get_embedding_function, embedding
 from ..config.config import PERSIST_DIRECTORY, COLLECTION_NAME
 
 # using old vectorstore
-def get_vectorstore():
-    return Chroma(
-        collection_name=COLLECTION_NAME,
-        embedding_function=get_embedding_function(),
-        persist_directory=PERSIST_DIRECTORY
-    )
+# def get_vectorstore():
+#     return Chroma(
+#         collection_name=COLLECTION_NAME,
+#         embedding_function=get_embedding_function(),
+#         persist_directory=PERSIST_DIRECTORY
+#     )
 
-def retrieve_from_vectorstore(vectorstore, query, drug_list, k=5):
-    retriever = vectorstore.as_retriever(search_kwargs={"k": k})
-    results = []
-    for drug in drug_list:
-        result = vectorstore.similarity_search(query, filter={"drug_name": drug}, k=k if len(drug_list) <= 3 else 1)
-        results.extend(result)
-    return results
+# def retrieve_from_vectorstore(vectorstore, query, drug_list, k=5):
+#     retriever = vectorstore.as_retriever(search_kwargs={"k": k})
+#     results = []
+#     for drug in drug_list:
+#         result = vectorstore.similarity_search(query, filter={"drug_name": drug}, k=k if len(drug_list) <= 3 else 1)
+#         results.extend(result)
+#     return results
 
 # using new vectorstore
 # 全域 Chroma 客戶端
