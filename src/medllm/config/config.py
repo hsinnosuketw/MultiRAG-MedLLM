@@ -18,4 +18,7 @@ NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USERNAME = "neo4j"
 NEO4J_PASSWORD = "password"
 SQLITE_DB_PATH = "./drug.db"
-
+SQL_HOST = "localhost"
+SQL_DB_NAME = "cpic_db"
+SQL_USERNAME = "postgres"
+SQL_PASSWORD = "password"
