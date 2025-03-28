@@ -16,7 +16,7 @@ def main(question):
     # drug_list_extracted = extract.extract_drug(question)
     # query_vs = rewrite_vectorstore_query(question, drug_tag_list, drug_list_extracted)
     # vectorstore = get_vectorstore()
-    vs_docs = retrieve_from_chroma(question, k=5)
+    vs_docs = retrieve_from_chroma(question, n_results=5)
 
     # GraphRAG 重寫與檢索
     graph_query = rewrite_graph_query(question)

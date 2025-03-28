@@ -1,7 +1,7 @@
 from langchain_community.vectorstores import Chroma
 import chromadb
 from chromadb.config import Settings
-from .embeddings import get_embedding_function, embedding
+from .embeddings import embedding
 from ..config.config import PERSIST_DIRECTORY, COLLECTION_NAME
 
 # using old vectorstore
@@ -22,7 +22,7 @@ from ..config.config import PERSIST_DIRECTORY, COLLECTION_NAME
 
 # using new vectorstore
 # 全域 Chroma 客戶端
-client = chromadb.PersistentClient(path="../../../chroma_database_demo")
+client = chromadb.PersistentClient(path="./chroma_database_demo")
 collection_name = "drugbank"
 collection = client.get_or_create_collection(name=collection_name)
 
