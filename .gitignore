@@ -5,3 +5,6 @@ __pycache__/
 *.env
 test_graphrag.py
 Original_llm_pipeline.py
+test*
+cpic_db_dump*
+database_setup.py
