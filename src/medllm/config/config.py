@@ -6,6 +6,7 @@ load_dotenv()
 
 # 配置參數
 API_KEY = os.getenv("NVIDIA_API_KEY")
+MODEL_ID_RETRIEVER = "meta/llama-3.3-70b-instruct"
 MODEL_ID_VS = "meta/llama-3.3-70b-instruct"
 MODEL_ID_GRAPH = "meta/llama-3.3-70b-instruct"
 MODEL_ID_TAB = "meta/llama-3.3-70b-instruct"
