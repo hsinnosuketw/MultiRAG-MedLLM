@@ -11,7 +11,7 @@ def get_retrieval_llm():
 def grade_retrieval(question, documents):
     prompt = PromptTemplate(
         template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a grader assessing relevance
-        of a retrieved document to a user question. If the document contains keywords related to the user question,
+        of a retrieved document to a user question. If the document contains keywords related to the user question or is a deterministic answer to the user question,
         grade it as relevant. Give a binary score 'yes' or 'no' in JSON with key 'score'.
         <|eot_id|><|start_header_id|>user<|end_header_id>
         Document: {document}\nQuestion: {question} <|eot_id|>""",
