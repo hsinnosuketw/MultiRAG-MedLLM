@@ -148,17 +148,21 @@ def query_interaction(cypher_query: str) -> str:
     All drug names are capital.
 
     Applicable Scenarios:
-        - Retrieve interactions between specific drugs, such as Nivolumab and Acetylsalicylic acid.
+        - Retrieve interactions between specific drugs, such as Nivolumab and Rituximab.
         - Explore relationships in the graph database to understand how drugs interact with each other.
 
     Usage Examples:
-        1. Query the interaction between Nivolumab and Acetylsalicylic acid:
+        1. Query the interaction between Nivolumab and Rituximab:
             MATCH (target)-[r]-(neighbor)
-            WHERE target.id = 'Nivolumab' AND neighbor.id = 'Acetylsalicylic acid'
-            RETURN neighbor, r
+            WHERE target.id = 'Nivolumab' AND neighbor.id = 'Rituximab'
+            RETURN r.description
         2. Find all drugs interacting with Nivolumab:
             MATCH (target {id: 'Nivolumab'})-[r]-(neighbor)
             RETURN neighbor.id, r.description
+        3. Check if Nivolumab is in the database:
+            MATCH (n {id: 'Nivolumab'})
+            RETURN count(n) > 0 AS exists
+            
     Parameters:
     cypher_query (str): The Cypher query to execute against the Neo4j graph database.
                     The query should be a valid Cypher statement that returns drug-drug interaction data.
@@ -166,18 +170,14 @@ def query_interaction(cypher_query: str) -> str:
     Returns:
     str: A string representation of the query result, containing the descriptions of drug-drug interactions.
     If no interactions are found, an empty string is returned within a list (e.g., `[""]`).
+    If you got an empty string as return, you can just answer that 'No interaction is found in the DrugBank database. Respond to the user with: "There is no known interaction between these drugs according to my database."' and stop retrieving.
     If an error occurs, returns an error message in the format "Neo4j Error: <error message>".
-
-    Notes:
-    - The Neo4j database must be running and accessible at the configured URI (default: bolt://localhost:7687).
-    - The Cypher query must be valid and match the database schema (e.g., nodes with `id` properties and relationships with a `description` property).
-    - Ensure the Neo4j driver is properly configured with the correct authentication credentials (default: username "neo4j", password "password").
     """
     try:
         driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
         with driver.session() as session:
             result = session.run(cypher_query)            
-            res = [record["r"]["description"] for record in result] or [""]
+            res = [record["r.description"]for record in result] or [""]
             return res
         driver.close()
     except Exception as e:
