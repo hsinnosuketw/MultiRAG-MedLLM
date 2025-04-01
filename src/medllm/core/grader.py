@@ -12,7 +12,8 @@ def grade_retrieval(question, documents):
     prompt = PromptTemplate(
         template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a grader assessing relevance
         of a retrieved document to a user question. If the document contains keywords related to the user question or is a deterministic answer to the user question,
-        grade it as relevant. Give a binary score 'yes' or 'no' in JSON with key 'score'.
+        grade it as relevant. Give a binary score "yes" or "no" in JSON with key "score".
+        EXAMPLE: {"score" : "yes"} or {"score" : "no"}
         <|eot_id|><|start_header_id|>user<|end_header_id>
         Document: {document}\nQuestion: {question} <|eot_id|>""",
         input_variables=["question", "document"]
@@ -31,7 +32,9 @@ def filter_retrieval(question, documents):
 def rank_documents(question, documents):
     ranker = NVIDIARerank(model="nv-rerank-qa-mistral-4b:1", api_key=API_KEY)
     ranker.top_n = 5
-    return ranker.compress_documents(query=question, documents=documents)
+    threshold = 0
+    reranked_docs = ranker.compress_documents(query=question, documents=documents)
+    return [doc for doc in reranked_docs if doc.metadata.get("relevance_score", 0) > threshold]
 
 def generate_answer(question, context):
     prompt = PromptTemplate(template=AnswerGenerationPrompt, input_variables=["question", "context"])
