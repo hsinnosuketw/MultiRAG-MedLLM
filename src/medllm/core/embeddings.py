@@ -7,7 +7,7 @@ import subprocess
 
 # 檢查是否有 CUDA GPU 可用
 if not torch.cuda.is_available():
-    print("No CUDA GPU available. Switching to CPU.")
+    # print("No CUDA GPU available. Switching to CPU.")
     device = torch.device('cpu')
 else:
     def get_nvidia_smi_memory():
@@ -23,7 +23,7 @@ else:
                 gpu_memory[i] = {'total': total, 'used': used, 'free': total - used}
             return gpu_memory
         except subprocess.CalledProcessError as e:
-            print(f"Error running nvidia-smi: {e}")
+            # print(f"Error running nvidia-smi: {e}")
             return None
 
     def select_gpu_with_enough_memory(min_required_vram_mb=13000):
@@ -36,21 +36,21 @@ else:
                 total_memory = memory_info[gpu_id]['total']
                 free_memory = memory_info[gpu_id]['free']
 
-                print(f"GPU {gpu_id}:")
-                print(f"  Total Memory: {total_memory:.2f} MB")
-                print(f"  Used Memory: {memory_info[gpu_id]['used']:.2f} MB")
-                print(f"  Free Memory: {free_memory:.2f} MB")
+                # print(f"GPU {gpu_id}:")
+                # print(f"  Total Memory: {total_memory:.2f} MB")
+                # print(f"  Used Memory: {memory_info[gpu_id]['used']:.2f} MB")
+                # print(f"  Free Memory: {free_memory:.2f} MB")
 
                 if free_memory >= min_required_vram_mb:
-                    print(f"GPU {gpu_id} has sufficient memory ({free_memory:.2f} MB >= {min_required_vram_mb} MB).")
+                    # print(f"GPU {gpu_id} has sufficient memory ({free_memory:.2f} MB >= {min_required_vram_mb} MB).")
                     return torch.device(f'cuda:{gpu_id}')
-        print("No GPU has sufficient memory. Switching to CPU.")
+        # print("No GPU has sufficient memory. Switching to CPU.")
         return torch.device('cpu')
 
     # 設定模型所需的預估 VRAM
     required_vram_mb = 13000  # 約 13GB
     device = select_gpu_with_enough_memory(min_required_vram_mb=required_vram_mb)
-    print(f"Selected device: {device}")
+    # print(f"Selected device: {device}")
 
 # 全域變數，將模型和 tokenizer 載入到選定設備
 tokenizer = AutoTokenizer.from_pretrained('infly/inf-retriever-v1-1.5b', trust_remote_code=True)
@@ -85,8 +85,8 @@ def embedding(sentence: str, task: str = None) -> Tensor:
 if __name__ == "__main__":
     test_sentence = "This is a test sentence."
     embedding_vector = embedding(test_sentence)
-    print(f"Embedding shape: {embedding_vector.shape}")
-    print(f"Embedding device: {embedding_vector.device}")
+    # print(f"Embedding shape: {embedding_vector.shape}")
+    # print(f"Embedding device: {embedding_vector.device}")
 
 # from langchain_community.embeddings import GPT4AllEmbeddings
 # from ..config.config import MODEL_NAME_EMBED, GPT4ALL_KWARGS
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
 # # 檢查是否有 CUDA GPU 可用
 # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-# print(f"Using device: {device}")
+# # print(f"Using device: {device}")
 
 # # 全域變數，將模型和 tokenizer 載入到 GPU
 # tokenizer = AutoTokenizer.from_pretrained('infly/inf-retriever-v1-1.5b', trust_remote_code=True)
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 #         input_text = sentence
 
 #     # 將文本轉換為 token，移動到 GPU
-#     # print(device)
+#     # # print(device)
 #     batch_dict = tokenizer([input_text], max_length=max_length, padding=True, truncation=True, return_tensors='pt')
 #     batch_dict = {k: v.to(device) for k, v in batch_dict.items()}  # 將所有張量移到 GPU
     
