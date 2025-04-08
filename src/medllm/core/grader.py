@@ -1,6 +1,6 @@
 from langchain_nvidia_ai_endpoints import ChatNVIDIA, NVIDIARerank
 from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_core.documents import Document
 from src.medllm.core.prompt import RetrieverFilterPrompt, AnswerGenerationPrompt
 from src.medllm.config.config import MODEL_ID_FILTER, API_KEY
@@ -39,6 +39,7 @@ def rank_documents(question, documents):
 def generate_answer(question, context):
     prompt = PromptTemplate(template=AnswerGenerationPrompt, input_variables=["question", "context"])
     llm = get_retrieval_llm()
-    rag_chain = prompt | llm | JsonOutputParser()
+    rag_chain = prompt | llm | StrOutputParser()
     generation = rag_chain.invoke({"context": context, "question": question})
+    generation = {"answer" : generation}
     return generation['answer']

@@ -307,7 +307,7 @@ AnswerGenerationPrompt = """<|begin_of_text|><|start_header_id|>system<|end_head
     - If sufficient data can be synthesized and confident with the information, provide a direct, evidence-based answer.
     - If there's not enough information available or not confident, state so explicitly.
 
-    Return your answer as a strict JSON object with a single key "answer."
+    Return your answer as a string.
 
     Example:
     For a question like: "Can I take ibuprofen with aspirin?"
@@ -320,10 +320,8 @@ AnswerGenerationPrompt = """<|begin_of_text|><|start_header_id|>system<|end_head
     - Evaluate if there are any specific patient conditions or warnings to consider.
     - Synthesize the information to determine if it's safe to take ibuprofen with aspirin.
 
-    A possible JSON might be:
-    {{
-        "answer: 'It's generally safe to take ibuprofen with aspirin, but monitor for increased risk of bleeding or stomach irritation. However, always consult with a healthcare provider for your specific case.'"
-    }}
+    A possible answer might be:
+    "It's generally safe to take ibuprofen with aspirin, but monitor for increased risk of bleeding or stomach irritation. However, always consult with a healthcare provider for your specific case."
 
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question}
