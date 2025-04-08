@@ -145,7 +145,7 @@ def query_interaction(cypher_query: str) -> str:
     Query a Neo4j graph database to retrieve drug-drug interactions using Cypher queries.
     The graph database represents drugs as nodes and their interactions as relationships (edges) between these nodes.
     Each relationship contains a description of the interaction between two drugs.
-    All drug names are capital.
+    All drug names are capitalized, like Lepirudin and Glycochenodeoxycholic Acid.
 
     Applicable Scenarios:
         - Retrieve interactions between specific drugs, such as Nivolumab and Rituximab.
