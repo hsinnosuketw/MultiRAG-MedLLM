@@ -1,11 +1,11 @@
+.*
+*.db
+*.env
+package*
+node_modules/
 Trial_chroma_langchain/
 chroma_database_demo/
 __pycache__/
-*.db
-*.env
-test_graphrag.py
-Original_llm_pipeline.py
 test*
 cpic_db_dump*
 database_setup.py
-.*
