@@ -1,9 +1,8 @@
 from langchain_nvidia_ai_endpoints import ChatNVIDIA, NVIDIARerank
 from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
-from langchain_core.documents import Document
-from src.medllm.core.prompt import RetrieverFilterPrompt, AnswerGenerationPrompt
-from src.medllm.config.config import MODEL_ID_FILTER, API_KEY
+from langchain_core.output_parsers import StrOutputParser
+from src.medllm.core.prompt import AnswerGenerationPrompt
+from src.medllm.config.config import MODEL_ID_RETRIEVER, API_KEY
 
 def get_retrieval_llm():
     return ChatNVIDIA(model=MODEL_ID_FILTER, temperature=0)

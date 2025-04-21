@@ -8,3 +8,4 @@ Original_llm_pipeline.py
 test*
 cpic_db_dump*
 database_setup.py
+.*
