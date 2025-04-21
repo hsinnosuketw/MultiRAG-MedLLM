@@ -18,7 +18,7 @@ def main(question):
     vs_docs = retrieve_from_chroma(question, n_results=5)
     retrieved_info = retrieve(question)
 
-    # 將檢索倒的資訊轉換為 Document 格式
+    # 將檢索到的資訊轉換為 Document 格式
     docs = vs_docs
 
     retrieved_docs = Document(page_content=str(retrieved_info))
