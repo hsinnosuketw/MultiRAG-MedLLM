@@ -1,10 +1,12 @@
 .*
 *.db
 *.env
+*.tar
 package*
 node_modules/
 Trial_chroma_langchain/
 chroma_database_demo/
+chroma_database_full/
 __pycache__/
 test*
 cpic_db_dump*

@@ -3,7 +3,7 @@ from langchain_community.vectorstores import Chroma
 import chromadb
 from chromadb.config import Settings
 from .embeddings import embedding
-from ..config.config import PERSIST_DIRECTORY, COLLECTION_NAME
+# from ..config.config import PERSIST_DIRECTORY, COLLECTION_NAME
 
 # using old vectorstore
 # def get_vectorstore():
@@ -23,8 +23,8 @@ from ..config.config import PERSIST_DIRECTORY, COLLECTION_NAME
 
 # using new vectorstore
 # 全域 Chroma 客戶端
-client = chromadb.PersistentClient(path="./chroma_database_demo")
-collection_name = "drugbank"
+client = chromadb.PersistentClient(path="./chroma_database_full")
+collection_name = "drugbank_full"
 collection = client.get_or_create_collection(name=collection_name)
 
 def parse_to_langchain_documents(results):
