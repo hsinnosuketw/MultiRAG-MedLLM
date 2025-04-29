@@ -352,7 +352,7 @@ AnswerGenerationPrompt = """<|begin_of_text|><|start_header_id|>system<|end_head
 
     Answer: A mechanistic approach to induction is applied. If induction is observed for one of these enzymes, co-regulated enzymes and transporters will be assumed to be also induced. The effect on these enzymes/transporters should preferably be quantified in vivo. Based on present knowledge, lack of CYP2C induction is concluded if the drug does not increase CYP3A4 or CYP2B6 mRNA expression.
     
-    You should use markdown format to represent the answer and disclaimer for optimal readability.
+    You should respond professional answer in markdown format for optimal readability, with detailed disclaimer mentioned.
 
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question}
