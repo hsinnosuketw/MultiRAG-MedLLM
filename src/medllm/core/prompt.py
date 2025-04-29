@@ -307,7 +307,7 @@ AnswerGenerationPrompt = """<|begin_of_text|><|start_header_id|>system<|end_head
 
     5. **Synthesize Information**: Integrate information from all sources, ensuring consistency and accuracy.
 
-    6. **Provide Answer or Disclaimer**:
+    6. **Provide Answer and Disclaimer**:
     - If sufficient data can be synthesized and confident with the information, provide a direct, evidence-based answer.
     - If there's not enough information available or not confident, state so explicitly.
 
@@ -347,12 +347,12 @@ AnswerGenerationPrompt = """<|begin_of_text|><|start_header_id|>system<|end_head
         *   Regarding CYP2C specifically, the context provides a way to conclude *lack* of induction without clinical CYP2C assessment: *if* the drug does *not* increase CYP3A4 or CYP2B6 mRNA expression. This implicitly uses the PXR link (since PXR regulates 3A4 and 2B6).
         *   However, the context *does not* support replacing clinical assessment with *in vitro*/paper arguments *if* CYP3A4/2B6 mRNA *is* increased (i.e., if the condition for ruling out CYP2C induction is *not* met). In such cases, the preference for *in vivo* quantification would likely still apply.
 
-    6.  **Provide Answer or Disclaimer (Based *only* on the provided Context and carefully selected and closely related information)**:
+    6.  **Provide Answer and Disclaimer (Based *only* on the provided Context and carefully selected and closely related information)**:
         *   Construct an answer addressing both parts of the question, strictly adhering to the information in the context.
 
     Answer: A mechanistic approach to induction is applied. If induction is observed for one of these enzymes, co-regulated enzymes and transporters will be assumed to be also induced. The effect on these enzymes/transporters should preferably be quantified in vivo. Based on present knowledge, lack of CYP2C induction is concluded if the drug does not increase CYP3A4 or CYP2B6 mRNA expression.
     
-    You should use markdown format for better readability.
+    You should use markdown format to represent the answer and disclaimer for optimal readability.
 
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question}
